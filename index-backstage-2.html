@@ -5,14 +5,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Live Samagam</title>
-  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="index-backstage-2.css" />
+  <style>
+    .title-bar {
+      height: 28px;
+    }
+
+    .event-item {
+      border-radius: 8px;
+    }
+
+    .event-divider {
+      display: none;
+    }
+  </style>
 </head>
 
-<body>
+<body style="background-image: url('background/index-backstage-2.PNG');">
   <div class="top-bar"></div>
   <div class="bottom-container">
     <div class="title-bar">
       <div id="title-text">Samagam Name Here</div>
+      <div class="brand-center" id="brand-center">samagams.org</div>
       <div class="datetime" id="datetime"></div>
     </div>
     <div class="ticker">
@@ -163,14 +177,19 @@
       (a, b) => new Date(a.startDate) - new Date(b.startDate)
     );
 
-    // Format with bold for India samagams
+    // Render each samagam as a visual chip with city and date.
     function formatEvent(e) {
-      const text = `${e.city} (${e.displayRange})`;
-      return e.isIndia ? `<b>${text}</b>` : text;
+      return `
+        <span class="event-item${e.isIndia ? " india" : ""}">
+          <span class="event-city">${e.city}</span>
+          <span class="event-date">${e.displayRange}</span>
+        </span>
+      `;
     }
 
-    const finalTicker =
-      merged.map(formatEvent).join("   |   ") + " - samagams.org";
+    const finalTicker = merged.length
+      ? merged.map(formatEvent).join('<span class="event-divider" aria-hidden="true"></span>')
+      : '<span class="event-empty">No upcoming samagams.</span>';
 
     document.getElementById("event-ticker").innerHTML = finalTicker;
   } catch (err) {
